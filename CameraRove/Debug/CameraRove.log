@@ -1,0 +1,4 @@
+﻿cl : 命令行  warning D9035: “Gm”选项已否决，并将在将来的版本中移除
+  Lesson5.cpp
+D:\BASIC\Desktop\3d 程序设计基础\lesson05\Lesson5.cpp(295,3): warning C4838: 从“int”转换到“BYTE”需要收缩转换
+  CameraRove.vcxproj -> D:\BASIC\Desktop\3d 程序设计基础\第6章-摄像机类\CameraRove\Debug\CameraRove.exe
