@@ -83,19 +83,25 @@
     <ClInclude Include="3DSLoader.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CBMPLoader.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="Keys.h" />
-    <ClInclude Include="Lesson5_2022_9_19.h" />
+    <ClInclude Include="Lesson5_2022_9_20.h" />
     <ClInclude Include="MD2Loader.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3DSLoader.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CBMPLoader.cpp" />
-    <ClCompile Include="Lesson5_2022_9_19.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Lesson5_2022_9_20.cpp" />
     <ClCompile Include="MD2Loader.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
