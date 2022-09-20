@@ -132,6 +132,7 @@
     <ClInclude Include="CBMPLoader.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="Lesson5_2022_9_19.h" />
+    <ClInclude Include="MD2Loader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
@@ -140,6 +141,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CBMPLoader.cpp" />
     <ClCompile Include="Lesson5_2022_9_19.cpp" />
+    <ClCompile Include="MD2Loader.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>

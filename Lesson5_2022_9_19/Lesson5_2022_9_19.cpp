@@ -12,7 +12,7 @@
 #include "Camera.h"
 #include "Keys.h"
 #include "3DSLoader.h"
-
+#include "MD2Loader.h"
 
 HDC			hDC = NULL;		// Private GDI Device Context
 HGLRC		hRC = NULL;		// Permanent Rendering Context
@@ -34,8 +34,12 @@ Camera m_Camera;
 Keys m_Keys;
 bool mySp=false;
 bool myRenderMode=true;
+bool myMp = false;
+
+
 
 C3DSLoader g_3DS;
+CMD2Loader g_Md2;
 
 void UpdateCamera()
 {
@@ -44,11 +48,11 @@ void UpdateCamera()
 	/** 键盘按键响应 */
 	if (m_Keys.IsPressed(VK_SHIFT))                      /**< 按下SHIFT键时加速 */
 	{
-		m_Camera.setSpeed(10.0f);
+		m_Camera.setSpeed(2.0f);
 	}
 	if (!m_Keys.IsPressed(VK_SHIFT))
 	{
-		m_Camera.setSpeed(9.0f);
+		m_Camera.setSpeed(1.0f);
 	}
 	if (m_Keys.IsPressed(VK_UP) || m_Keys.IsPressed('W'))   /**< 向上方向键或'W'键按下 */
 		m_Camera.moveCamera(m_Camera.getSpeed());          /**< 移动摄像机 */
@@ -76,6 +80,25 @@ void UpdateCamera()
 
 	if (!m_Keys.IsPressed(VK_SPACE))
 		mySp = false;
+
+
+
+
+	/** 'M'键播放下一个动作 */
+	if (m_Keys.IsPressed('M') && !myMp)
+	{
+		myMp= true;
+
+		/** 设置当前动作为下一个动作 */
+		g_Md2.GetModel().currentAnim = (g_Md2.GetModel().currentAnim + 1) % (g_Md2.GetModel().numOfAnimations);
+
+		/** 设置当前帧为下一个动作的开始帧 */
+		g_Md2.GetModel().currentFrame = (g_Md2.GetModel()).pAnimations[g_Md2.GetModel().currentAnim].startFrame;
+	}
+	if (!m_Keys.IsPressed('M'))
+	{
+		myMp= false;
+	}
 
 }
 
@@ -109,8 +132,9 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 
 	/** 初始化3DS文件 */
 	g_3DS.Init("data/model.3ds");
+	g_Md2.Init("hobgoblin.MD2", "hobgoblin.bmp");
 
-	m_Camera.setCamera(0.0f, 1.5f, 6.0f, 0.0f, 1.5f, 0.0f, 0.0f, 1.0f, 0.0f);
+	m_Camera.setCamera(0.0f, 1.5f, 6.0f, 0.0f, 0.0f, -1.f, 0.0f, 1.0f, 0.0f);
 
 	return TRUE;										// Initialization Went OK
 }
@@ -122,17 +146,23 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	/** 用户自定义的绘制过程 */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+	/** 放置摄像机 */
+	m_Camera.setLook();
 
 	glPushMatrix();
-	glTranslatef(0, -1, 0);
-	glScalef(0.7, 0.7, 0.7);
+	glTranslatef(0, 0, 0);
+	glScalef(1, 1, 1);
 	g_3DS.Draw();                            /**< 显示3DS模型 */
 	glPopMatrix();
 
+	glPushAttrib(GL_CURRENT_BIT); /**< 保存现有颜色属实性 */
+	glPushMatrix();
+	glTranslatef(0, 0, 0);
+	glScalef(1, 1, 1);
+	g_Md2.AnimateMD2Model();
+	glPopMatrix();
+	glPopAttrib();   /**< 恢复前一属性 */
 
-
-	/** 放置摄像机 */
-	m_Camera.setLook();
 
 	rtri += 0.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
 	rquad -= 0.15f;										// Decrease The Rotation Variable For The Quad ( NEW )

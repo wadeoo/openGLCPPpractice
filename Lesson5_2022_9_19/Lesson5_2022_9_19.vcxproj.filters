@@ -36,6 +36,9 @@
     <ClInclude Include="3DSLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MD2Loader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lesson5_2022_9_19.cpp">
@@ -54,6 +57,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="3DSLoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MD2Loader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
