@@ -16,6 +16,7 @@
 #include "Font.h"
 #include "SkyBox.h"
 #include "Terrain.h"
+#include "Input.h"
 
 HDC			hDC = NULL;		// Private GDI Device Context
 HGLRC		hRC = NULL;		// Permanent Rendering Context
@@ -44,13 +45,103 @@ bool f_sp=false;
 bool f_RenderMode=true;
 bool f_mp = false;
 
-
+CInputSystem*  f_pInput; 
+CInputSystem*  f_pInputForMouse; 
 
 
 
 
 C3DSLoader f_3DS;
 CMD2Loader f_MD2;
+
+//direct keyboard drawfunc
+void DirectKeyboardDraw(){
+	/** 用户自定义的绘制过程 */
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -10.0f);
+
+	/** 检测键盘输入数据 */
+	char string[50] = { "您没有按下任何键" };
+
+	/** 检测A键按下？ */
+	if (f_pInput->GetKeyboard()->KeyDown(DIK_A))
+		sprintf(string, "您按下了 %s 键", "A");
+
+	/** 检测F1键按下？ */
+	if (f_pInput->GetKeyboard()->KeyDown(DIK_F1))
+		sprintf(string, "您按下了 %s 键", "F1");
+
+	/** 检测Ctrl和A键同时按下？*/
+	if (f_pInput->GetKeyboard()->KeyDown(DIK_A) &&
+		f_pInput->GetKeyboard()->KeyDown(DIK_LCONTROL))
+		sprintf(string, "您按下了 %s 键", "CTRL + A");
+
+	/** 输出提示信息 */
+	glColor3f(1.0f, 0.0f, 1.0f);
+	f_Font.PrintText(string, -2.0, 0.0);
+
+	glFlush();
+}
+
+
+void DirectMouseDraw(){
+	/** 用户自定义的绘制过程 */
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -10.0f);
+
+	/** 检测鼠标输入数据 */
+	char string[50];
+	static bool flag = false;
+	static bool lButtonDown = false;
+	static bool rButtonDown = false;
+
+	/** 设置变量 */
+	if (f_pInputForMouse->GetMouse()->IsLButtonPressed())
+		lButtonDown = true;
+	if (f_pInputForMouse->GetMouse()->IsRButtonPressed())
+		rButtonDown = true;
+
+	if (lButtonDown && f_pInputForMouse->GetMouse()->IsLButtonPressed() == false)
+	{
+		lButtonDown = false;
+		flag = false;
+	}
+
+	if (rButtonDown && f_pInputForMouse->GetMouse()->IsRButtonPressed() == false)
+	{
+		rButtonDown = false;
+		flag = false;
+	}
+
+	/** 左键按下时 */
+	if (lButtonDown && !flag)
+	{
+		flag = true;
+		sprintf(string, "鼠标左键被按下，位置为：%d,%d",
+			f_pInputForMouse->GetMouse()->GetMousePos().x,
+			f_pInputForMouse->GetMouse()->GetMousePos().y);
+		MessageBox(NULL, string, "提示", MB_OK);
+
+	}
+
+	/** 右键按下时 */
+	if (rButtonDown && !flag)
+	{
+		flag = true;
+		sprintf(string, "鼠标右健被按下，位置为：%d,%d",
+			f_pInputForMouse->GetMouse()->GetMousePos().x,
+			f_pInputForMouse->GetMouse()->GetMousePos().y);
+		MessageBox(NULL, string, "提示", MB_OK);
+
+	}
+
+	glFlush();
+}
+
+
+
 
 /** 计算帧速 */
 void CaculateFrameRate()
@@ -179,13 +270,29 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.1f);
 	glClearDepth(1.0f);
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	/** 创建输入系统 */
+	f_pInput = new CInputSystem();
+
+	/** 输入系统初始化 */
+	f_pInput->Init(hWnd, (HINSTANCE)GetModuleHandle(NULL),
+		true, IS_USEKEYBOARD);
+
+
+	/** 创建输入系统鼠标 */
+	f_pInputForMouse = new CInputSystem();
+
+	/** 输入系统初始化 */
+	f_pInputForMouse->Init(hWnd, (HINSTANCE)GetModuleHandle(NULL),
+		true,IS_USEMOUSE);
+
 
 	/*初始化字体*/
 	if (!f_Font.InitFont())
@@ -203,8 +310,8 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	f_3DS.Init("data/model.3ds");
 	f_MD2.Init("hobgoblin.MD2", "hobgoblin.bmp");
 
-//	f_Camera.setCamera(0.0f, 1.5f, 6.0f, 0.0f, 0.0f, -1.f, 0.0f, 1.0f, 0.0f);
-	f_Camera.setCamera(381, 35, 674, 374.5, 35, 669, 0, 1, 0);
+	f_Camera.setCamera(0.0f, 1.5f, 6.0f, 0.0f, 0.0f, -1.f, 0.0f, 1.0f, 0.0f);
+//	f_Camera.setCamera(381, 35, 674, 374.5, 35, 669, 0, 1, 0);
 
 
 
@@ -218,6 +325,17 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	/** 用户自定义的绘制过程 */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+
+	DirectKeyboardDraw();
+
+	DirectMouseDraw();
+
+
+
+
+
+
+
 	/** 放置摄像机 */
 	f_Camera.setLook();
 
@@ -241,10 +359,10 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	//md2
 	glPushAttrib(GL_CURRENT_BIT); /**< 保存现有颜色属实性 */
 	glPushMatrix();
-//	glTranslatef(-5, 1, 0);
-	glTranslatef(300,600,18);
+	glTranslatef(-5, 1, 0);
+	//glTranslatef(300,600,18);
 
-//	glScalef(.05f,.05f,.05f);
+	//glScalef(.05f,.05f,.05f);
 	glScalef(0.5f,0.5f,0.5f);
 
 	f_MD2.AnimateMD2Model();
@@ -261,6 +379,21 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 {
+
+	/** 用户自定义的卸载过程 */
+	if (f_pInput)
+	{
+		delete f_pInput;
+		f_pInput = NULL;
+	}
+
+
+	if (f_pInputForMouse)
+	{
+		delete f_pInputForMouse;
+		f_pInputForMouse = NULL;
+	}
+
 	if (fullscreen)										// Are We In Fullscreen Mode?
 	{
 		ChangeDisplaySettings(NULL, 0);					// If So Switch Back To The Desktop
@@ -298,6 +431,8 @@ GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 		MessageBox(NULL, "Could Not Unregister Class.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 		hInstance = NULL;									// Set hInstance To NULL
 	}
+
+
 }
 
 /*	This Code Creates Our OpenGL Window.  Parameters Are:					*
@@ -597,6 +732,8 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				}
 			}
 			UpdateCamera();
+			f_pInput->Update();
+			f_pInputForMouse->Update();
 		}
 	}
 

@@ -1,4 +1,4 @@
-﻿生成启动时间为 2022/9/21 0:43:04。
+﻿生成启动时间为 2022/9/21 20:28:57。
      1>项目“D:\BASIC\Desktop\openglCpp\openGLCPPpractice\Lesson5_2022_9_20\Lesson5_2022_9_20\Lesson5_2022_9_20.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um\gl" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Lesson5_2022_9_20.cpp
@@ -8,6 +8,7 @@
          Debug\Camera.obj
          Debug\CBMPLoader.obj
          Debug\Font.obj
+         Debug\Input.obj
          Debug\Lesson5_2022_9_20.obj
          Debug\MD2Loader.obj
          Debug\SkyBox.obj
@@ -19,4 +20,4 @@
 
 生成成功。
 
-已用时间 00:00:01.46
+已用时间 00:00:01.01
