@@ -211,7 +211,8 @@ void CTerrain::setTexCoord(float x,float z)
 /** 载入地面纹理 */
 bool CTerrain::loadTexture()
 {
-	char* fileName[] = {"data/terrain.bmp","data/detail.bmp"};	
+	//change here
+	char* fileName[] = {"data2/terrain.bmp","data2/detail.bmp"};	
 	for(int i=0; i < 2; i++)
 	{
 		if(!m_texture[i].LoadBitmap(fileName[i]) )                    /**< 载入位图文件 */
