@@ -210,7 +210,7 @@ void UpdateCamera()
 	Vector3 vNewPos = vPos;
 
 
-	/** 设置摄像机高度为 地形高度 + 10 */
+	/** 设置摄像机高度为 地形高度 + 10 + lift*/
 	vNewPos.y = (float)g_Terrain.getAveHeight(vPos.x, vPos.z) + 10+lift;
 
 	/** 得到高度差值 */

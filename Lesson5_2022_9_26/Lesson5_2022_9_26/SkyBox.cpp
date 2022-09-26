@@ -40,7 +40,8 @@ bool CSkyBox::init()
 	char *bmpName[] = { "back","front","top","left","right"};
 	for(int i=0; i< 5; i++)
 	{
-		sprintf(filename,"data/%s",bmpName[i]);
+		//change here
+		sprintf(filename,"data2/%s",bmpName[i]);
 		strcat(filename,".bmp");
 		if(!m_texture[i].LoadBitmap(filename))                     /**< 载入位图文件 */
 		{
