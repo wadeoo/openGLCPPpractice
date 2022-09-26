@@ -8,6 +8,7 @@ Lesson5_2022_9_26::Lesson5_2022_9_26()
 	g_RenderMode = true; 
 	g_Sp = false;
 	g_Mp = false;
+	lift = 0;
 }
 
 

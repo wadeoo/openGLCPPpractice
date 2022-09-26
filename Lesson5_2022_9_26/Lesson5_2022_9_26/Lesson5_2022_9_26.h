@@ -54,6 +54,7 @@ float g_Fps;
 bool  g_RenderMode;//绘制模式
 bool g_Sp;//空格键是否释放
 bool g_Mp;//'M'键是否释放
+float lift; //摄像机升降
 
 
 
@@ -198,13 +199,19 @@ void UpdateCamera()
 	if (g_Keys.IsPressed(VK_RIGHT) || g_Keys.IsPressed('D')) /**< 向右方向键或'D'键按下 */
 		g_Camera.yawCamera(g_Camera.getSpeed());            /**< 移动摄像机 */
 
+	//控制摄像机升降
+	if (g_Keys.IsPressed('Q'))
+		lift++;
+	if (g_Keys.IsPressed('E'))
+		lift--;
+
 	/** 根据地形高度更新摄像机 */
 	Vector3 vPos = g_Camera.getPosition();                  /**< 得到当前摄像机位置 */
 	Vector3 vNewPos = vPos;
 
 
 	/** 设置摄像机高度为 地形高度 + 10 */
-	vNewPos.y = (float)g_Terrain.getAveHeight(vPos.x, vPos.z) + 10;
+	vNewPos.y = (float)g_Terrain.getAveHeight(vPos.x, vPos.z) + 10+lift;
 
 	/** 得到高度差值 */
 	float temp = vNewPos.y - vPos.y;
