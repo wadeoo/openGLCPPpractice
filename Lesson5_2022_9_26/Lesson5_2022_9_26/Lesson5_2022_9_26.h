@@ -41,7 +41,7 @@ bool	active = TRUE;		// Window Active Flag Set To TRUE By Default
 bool	fullscreen = TRUE;	// Fullscreen Flag Set To Fullscreen Mode By Default
 
 C3DSLoader g_3DS;
-CMD2Loader g_Md2;
+CMD2Loader g_MD2;
 CTerrain g_Terrain;
 CSkyBox g_SkyBox;
 GLFont g_Font;
@@ -51,8 +51,9 @@ CInputSystem* g_pInputForKeyboard;
 CInputSystem* g_pInputForMouse;
 
 float g_Fps;
-bool  g_RenderMode;
-bool g_Sp;
+bool  g_RenderMode;//绘制模式
+bool g_Sp;//空格键是否释放
+bool g_Mp;//'M'键是否释放
 
 
 
@@ -258,6 +259,10 @@ void  PrintText()
 	//输入系统有关字体显示
 	InputSystemDraw();
 
+	/** 输出帧名称 */
+	sprintf(string, "当前动作:%s(按'M'键切换下一个动作)", g_MD2.GetModel().pAnimations[g_MD2.GetModel().currentAnim].strName);
+	g_Font.PrintText(string, -5.0f, 2.0f);
+
 	glPopAttrib();
 
 }
@@ -273,6 +278,19 @@ void Show3DS(float x, float z, float scale)
 	g_3DS.Draw();                            /**< 显示3DS模型 */
 	glPopMatrix();
 
+}
+
+//MD2模型显示加动画
+void Md2Animate(float x, float z, float h, float scale){
+
+	glPushAttrib(GL_CURRENT_BIT); /**< 保存现有颜色属实性 */
+	float y = g_Terrain.getAveHeight(x, z) + h;
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	glScalef(scale, scale, scale);
+	g_MD2.AnimateMD2Model();
+	glPopMatrix();
+	glPopAttrib();   /**< 恢复前一属性 */
 }
 
 /** 程序更新函数 */
@@ -302,7 +320,21 @@ void Update()
 	if (!g_Keys.IsPressed(VK_SPACE))
 		g_Sp = false;
 
+	/** 'M'键播放下一个动作 */
+	if (g_Keys.IsPressed('M') && !g_Mp)
+	{
+		g_Mp= true;
 
+		/** 设置当前动作为下一个动作 */
+		g_MD2.GetModel().currentAnim = (g_MD2.GetModel().currentAnim + 1) % (g_MD2.GetModel().numOfAnimations);
+
+		/** 设置当前帧为下一个动作的开始帧 */
+		g_MD2.GetModel().currentFrame = (g_MD2.GetModel()).pAnimations[g_MD2.GetModel().currentAnim].startFrame;
+	}
+	if (!g_Keys.IsPressed('M'))
+	{
+		g_Mp= false;
+	}
 }
 
 

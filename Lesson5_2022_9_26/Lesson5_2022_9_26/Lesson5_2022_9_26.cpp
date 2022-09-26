@@ -7,6 +7,7 @@ Lesson5_2022_9_26::Lesson5_2022_9_26()
 	g_Fps = 0;
 	g_RenderMode = true; 
 	g_Sp = false;
+	g_Mp = false;
 }
 
 
@@ -50,6 +51,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	/** 初始化3DS文件 */
 	g_3DS.Init("model.3ds");
 
+	g_MD2.Init("hobgoblin.md2", "hobgoblin.bmp");
 
 	/** 设置摄像机 */
 	g_Camera.setCamera(381, 35, 674, 374.5, 35, 669, 0, 1, 0);
@@ -76,6 +78,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 	/** 显示3DS模型 */
 	Show3DS(260, 583, 20);
+
+	//显示md2模型
+	Md2Animate(300, 600, 18, 0.50);
 
 	/** 输出屏幕信息 */
 	PrintText();
@@ -371,12 +376,14 @@ LRESULT CALLBACK WndProc(HWND	hWnd,			// Handle For This Window
 	case WM_KEYDOWN:							// Is A Key Being Held Down?
 	{
 		keys[wParam] = TRUE;					// If So, Mark It As TRUE
+		g_Keys.SetPressed(wParam);
 		return 0;								// Jump Back
 	}
 
 	case WM_KEYUP:								// Has A Key Been Released?
 	{
 		keys[wParam] = FALSE;					// If So, Mark It As FALSE
+		g_Keys.SetReleased(wParam);
 		return 0;								// Jump Back
 	}
 
@@ -406,7 +413,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 	}
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("啧啧", 640, 480, 16, fullscreen))
+	if (!CreateGLWindow("啧啧", 800, 600, 16, fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
