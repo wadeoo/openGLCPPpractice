@@ -219,3 +219,8 @@ void Camera::setLook()
 			  m_UpVector.x, m_UpVector.y, m_UpVector.z);
 }
 
+void Camera::ChangePosition(float yParam){
+	
+	float newY = m_Position.y + yParam;
+	setCamera(m_Position.x,newY, m_Position.z, m_View.x, m_View.y, m_View.z, m_UpVector.x, m_UpVector.y, m_UpVector.z);
+}

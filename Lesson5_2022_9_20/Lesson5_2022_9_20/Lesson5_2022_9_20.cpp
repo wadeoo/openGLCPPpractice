@@ -17,6 +17,8 @@
 #include "SkyBox.h"
 #include "Terrain.h"
 #include "Input.h"
+#include "Protechny.h"
+#include "Snow.h"
 
 HDC			hDC = NULL;		// Private GDI Device Context
 HGLRC		hRC = NULL;		// Permanent Rendering Context
@@ -54,6 +56,91 @@ CInputSystem*  f_pInputForMouse;
 C3DSLoader f_3DS;
 CMD2Loader f_MD2;
 
+
+CProtechny  f_Protechny;                 /**< 喷泉实例 */
+CSnow		f_Snow;			//雪花实例 
+
+//显示3ds模型
+void Show3DS(float x, float z, float scale){
+	glPushMatrix();
+	float y = f_Terrain.getAveHeight(x, z);  /**< 获得此处地形高度 */
+	glTranslatef(x, y, z);
+	glScalef(scale, scale, scale);
+	f_3DS.Draw();                            /**< 显示3DS模型 */
+	glPopMatrix();
+
+}
+
+
+
+
+// 绘制md2 动画
+void AnimateForMd2(float x, float z, float h, float scale){
+	glPushAttrib(GL_CURRENT_BIT); /**< 保存现有颜色属实性 */
+	float y = f_Terrain.getAveHeight(x, z) + h;
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	glScalef(scale, scale, scale);
+	f_MD2.AnimateMD2Model();
+	glPopMatrix();
+	glPopAttrib();   /**< 恢复前一属性 */
+}
+
+void ShowSnow(Vector3& cameraPos){
+	glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
+	f_Snow.Render();
+}
+
+
+bool SnowInit(){
+
+
+
+	/** 初始化雪花实例 */
+	if (!f_Snow.Init(500))
+	{
+		MessageBox(NULL, "雪花系统初始化失败!", "错误", MB_OK);
+		exit(-1);
+	}
+
+}
+
+
+// protechnyInit func
+bool ProtechnyInit()
+{
+
+	/** 用户自定义的初始化过程 */
+	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+	glClearDepth(1.0f);
+	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_DEPTH_TEST);
+	glShadeModel(GL_SMOOTH);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	glEnable(GL_TEXTURE_2D);             /**< 开启纹理映射 */
+
+	/** 设置混合因子获得半透明效果 */
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glEnable(GL_BLEND);				     /**< 启用混和 */
+
+
+	/** 初始化喷泉实例 */
+	if (!f_Protechny.Init(10000))
+	{
+		MessageBox(NULL, "雪花系统初始化失败!", "错误", MB_OK);
+		exit(-1);
+	}
+
+	glDisable(GL_BLEND);
+	return true;
+}
+
+
+
+
+
+
 //direct keyboard drawfunc
 void DirectKeyboardDraw(){
 	/** 用户自定义的绘制过程 */
@@ -63,6 +150,9 @@ void DirectKeyboardDraw(){
 
 	/** 检测键盘输入数据 */
 	char string[50] = { "您没有按下任何键" };
+
+
+	glPushAttrib(GL_CURRENT_BIT);
 
 	/** 检测A键按下？ */
 	if (f_pInput->GetKeyboard()->KeyDown(DIK_A))
@@ -80,6 +170,8 @@ void DirectKeyboardDraw(){
 	/** 输出提示信息 */
 	glColor3f(1.0f, 0.0f, 1.0f);
 	f_Font.PrintText(string, -2.0, 0.0);
+
+	glPopAttrib();
 
 	glFlush();
 }
@@ -195,11 +287,11 @@ void UpdateCamera()
 	/** 键盘按键响应 */
 	if (f_Keys.IsPressed(VK_SHIFT))                      /**< 按下SHIFT键时加速 */
 	{
-		f_Camera.setSpeed(2.0f);
+		f_Camera.setSpeed(10.0f);
 	}
 	if (!f_Keys.IsPressed(VK_SHIFT))
 	{
-		f_Camera.setSpeed(1.0f);
+		f_Camera.setSpeed(8.0f);
 	}
 	if (f_Keys.IsPressed(VK_UP) || f_Keys.IsPressed('W'))   /**< 向上方向键或'W'键按下 */
 		f_Camera.moveCamera(f_Camera.getSpeed());          /**< 移动摄像机 */
@@ -212,6 +304,31 @@ void UpdateCamera()
 
 	if (f_Keys.IsPressed(VK_RIGHT) || f_Keys.IsPressed('D')) /**< 向右方向键或'D'键按下 */
 		f_Camera.yawCamera(f_Camera.getSpeed());            /**< 移动摄像机 */
+
+
+	/** 根据地形高度更新摄像机 */
+	Vector3 vPos = f_Camera.getPosition();                  /**< 得到当前摄像机位置 */
+	Vector3 vNewPos = vPos;
+
+
+	/** 设置摄像机高度为 地形高度 + 10 */
+	vNewPos.y = (float)f_Terrain.getAveHeight(vPos.x, vPos.z) + 10;
+
+
+	
+
+
+	/** 得到高度差值 */
+	float temp = vNewPos.y - vPos.y;
+
+	/** 更新摄像机方向 */
+	Vector3 vView = f_Camera.getView();
+	vView.y += temp;
+
+	/** 设置摄像机 */
+	f_Camera.setCamera(vNewPos.x, vNewPos.y, vNewPos.z,
+		vView.x, vView.y, vView.z,
+		0, 1, 0);
 
 	/** 空格键切换绘制模式 */
 	if (f_Keys.IsPressed(VK_SPACE) && !f_sp)
@@ -262,7 +379,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 	glLoadIdentity();									// Reset The Projection Matrix
 
 	// Calculate The Aspect Ratio Of The Window
-	gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
+	gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 5000.0f);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
@@ -277,6 +394,26 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glEnable(GL_CULL_FACE);
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	//喷泉
+	//ProtechnyInit();
+	//
+
+
+
+	/** 设置混合因子获得半透明效果 */
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glEnable(GL_BLEND);				     /**< 启用混和 */
+
+
+	/** 初始化雪花实例 */
+	if (!f_Snow.Init(500))
+	{
+		MessageBox(NULL, "雪花系统初始化失败!", "错误", MB_OK);
+		exit(-1);
+	}
+
+
 
 	/** 创建输入系统 */
 	f_pInput = new CInputSystem();
@@ -306,12 +443,14 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 
 
 
+
+
 	/** 初始化3DS文件 */
 	f_3DS.Init("data/model.3ds");
 	f_MD2.Init("hobgoblin.MD2", "hobgoblin.bmp");
 
-	f_Camera.setCamera(0.0f, 1.5f, 6.0f, 0.0f, 0.0f, -1.f, 0.0f, 1.0f, 0.0f);
-//	f_Camera.setCamera(381, 35, 674, 374.5, 35, 669, 0, 1, 0);
+//	f_Camera.setCamera(0.0f, 1.5f, 6.0f, 0.0f, 0.0f, -1.f, 0.0f, 1.0f, 0.0f);
+	f_Camera.setCamera(381, 35, 674, 374.5, 35, 669, 0, 1, 0);
 
 
 
@@ -325,19 +464,19 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	/** 用户自定义的绘制过程 */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-
-	DirectKeyboardDraw();
-
-	DirectMouseDraw();
-
-
-
-
-
-
+	//glTranslatef(0.0f, 0.0f, -6.0f);
 
 	/** 放置摄像机 */
 	f_Camera.setLook();
+
+
+	//direct mouse
+	//DirectMouseDraw();
+
+	//direct keyboard
+	//DirectKeyboardDraw();
+
+
 
 	//地形
 	f_Terrain.render();
@@ -346,32 +485,21 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	f_SkyBox.render();
 
 	//3ds
-	glPushMatrix();
-	glTranslatef(0, 0, 0);
-	glScalef(1, 1, 1);
-	f_3DS.Draw();                            /**< 显示3DS模型 */
-	glPopMatrix();
-
-	//glLoadIdentity();
-	///** 放置摄像机 */
-	//f_Camera.setLook();
+	Show3DS(260, 583, 20);
 
 	//md2
-	glPushAttrib(GL_CURRENT_BIT); /**< 保存现有颜色属实性 */
-	glPushMatrix();
-	glTranslatef(-5, 1, 0);
-	//glTranslatef(300,600,18);
+	AnimateForMd2(300,600,18,0.5);
 
-	//glScalef(.05f,.05f,.05f);
-	glScalef(0.5f,0.5f,0.5f);
+	//protechny
+	//f_Protechny.Render();
 
-	f_MD2.AnimateMD2Model();
-	glPopMatrix();
-	glPopAttrib();   /**< 恢复前一属性 */
+	//snow render
+	ShowSnow(f_Camera.getPosition());
 
-	mainPrintText();
+	//屏幕左上角信息
+	//mainPrintText();
 
-
+	//强制执行所有命令
 	glFlush();
 
 	return TRUE;										// Keep Going
@@ -731,6 +859,12 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					return 0;						// Quit If Window Was Not Created
 				}
 			}
+
+			//if (f_Keys.IsPressed('Q'))
+			//	f_Camera.ChangePosition(-0.1);
+			//if (f_Keys.IsPressed('E'))
+			//	f_Camera.ChangePosition(0.1f);
+
 			UpdateCamera();
 			f_pInput->Update();
 			f_pInputForMouse->Update();

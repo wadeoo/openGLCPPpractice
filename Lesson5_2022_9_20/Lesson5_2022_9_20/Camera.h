@@ -64,6 +64,9 @@ public:
     //得到摄像机指针
 	static Camera* GetCamera(void) { return m_pCamera;}
 
+	void ChangePosition(float yParam);
+
+
 
 private:
 	/** 摄像机属性 */
