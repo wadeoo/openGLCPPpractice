@@ -45,6 +45,12 @@
     <ClCompile Include="Lesson5_2022_9_26.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Keys.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DSLoader.h">
@@ -75,6 +81,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Lesson5_2022_9_26.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Keys.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

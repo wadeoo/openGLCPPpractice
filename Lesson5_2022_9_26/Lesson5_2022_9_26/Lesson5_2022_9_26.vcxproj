@@ -82,6 +82,8 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CBMPLoader.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Keys.cpp" />
     <ClCompile Include="Lesson5_2022_9_26.cpp" />
     <ClCompile Include="MD2Loader.cpp" />
     <ClCompile Include="SkyBox.cpp" />
@@ -94,6 +96,8 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CBMPLoader.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Keys.h" />
     <ClInclude Include="Lesson5_2022_9_26.h" />
     <ClInclude Include="MD2Loader.h" />
     <ClInclude Include="SkyBox.h" />

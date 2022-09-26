@@ -14,12 +14,47 @@ Lesson5_2022_9_26::Lesson5_2022_9_26()
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
-	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
-	glClearDepth(1.0f);									// Depth Buffer Setup
-	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
-	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
+	/** 用户自定义的初始化过程 */
+	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+	glClearDepth(1.0f);
+	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glShadeModel(GL_SMOOTH);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	//输入系统初始化
+	InputSystemInit();
+
+
+	/** 初始化字体 */
+	if (!g_Font.InitFont())
+		MessageBox(NULL, "初始化字体失败!", "错误", MB_OK);
+
+	/** 初始化天空 */
+	if (!g_SkyBox.init())
+	{
+		MessageBox(NULL, "初始化天空失败!", "错误", MB_OK);
+		exit(0);
+	}
+
+	/** 初始化地形 */
+	if (!g_Terrain.init())
+	{
+		MessageBox(NULL, "初始化地形失败!", "错误", MB_OK);
+		exit(0);
+	}
+
+
+
+	/** 初始化3DS文件 */
+	g_3DS.Init("model.3ds");
+
+
+	/** 设置摄像机 */
+	g_Camera.setCamera(381, 35, 674, 374.5, 35, 669, 0, 1, 0);
+
+
 	return TRUE;										// Initialization Went OK
 }
 
@@ -27,78 +62,35 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();									// Reset The Current Modelview Matrix
-	glTranslatef(-1.5f, 0.0f, -6.0f);						// Move Left 1.5 Units And Into The Screen 6.0
-	glRotatef(rtri, 0.0f, 1.0f, 0.0f);						// Rotate The Triangle On The Y axis ( NEW )
-	glBegin(GL_TRIANGLES);								// Start Drawing A Triangle
-	glColor3f(1.0f, 0.0f, 0.0f);						// Red
-	glVertex3f(0.0f, 1.0f, 0.0f);					// Top Of Triangle (Front)
-	glColor3f(0.0f, 1.0f, 0.0f);						// Green
-	glVertex3f(-1.0f, -1.0f, 1.0f);					// Left Of Triangle (Front)
-	glColor3f(0.0f, 0.0f, 1.0f);						// Blue
-	glVertex3f(1.0f, -1.0f, 1.0f);					// Right Of Triangle (Front)
-	glColor3f(1.0f, 0.0f, 0.0f);						// Red
-	glVertex3f(0.0f, 1.0f, 0.0f);					// Top Of Triangle (Right)
-	glColor3f(0.0f, 0.0f, 1.0f);						// Blue
-	glVertex3f(1.0f, -1.0f, 1.0f);					// Left Of Triangle (Right)
-	glColor3f(0.0f, 1.0f, 0.0f);						// Green
-	glVertex3f(1.0f, -1.0f, -1.0f);					// Right Of Triangle (Right)
-	glColor3f(1.0f, 0.0f, 0.0f);						// Red
-	glVertex3f(0.0f, 1.0f, 0.0f);					// Top Of Triangle (Back)
-	glColor3f(0.0f, 1.0f, 0.0f);						// Green
-	glVertex3f(1.0f, -1.0f, -1.0f);					// Left Of Triangle (Back)
-	glColor3f(0.0f, 0.0f, 1.0f);						// Blue
-	glVertex3f(-1.0f, -1.0f, -1.0f);					// Right Of Triangle (Back)
-	glColor3f(1.0f, 0.0f, 0.0f);						// Red
-	glVertex3f(0.0f, 1.0f, 0.0f);					// Top Of Triangle (Left)
-	glColor3f(0.0f, 0.0f, 1.0f);						// Blue
-	glVertex3f(-1.0f, -1.0f, -1.0f);					// Left Of Triangle (Left)
-	glColor3f(0.0f, 1.0f, 0.0f);						// Green
-	glVertex3f(-1.0f, -1.0f, 1.0f);					// Right Of Triangle (Left)
-	glEnd();											// Done Drawing The Pyramid
+	
+	/** 放置摄像机 */
+	g_Camera.setLook();
 
-	glLoadIdentity();									// Reset The Current Modelview Matrix
-	glTranslatef(1.5f, 0.0f, -7.0f);						// Move Right 1.5 Units And Into The Screen 7.0
-	glRotatef(rquad, 1.0f, 1.0f, 1.0f);					// Rotate The Quad On The X axis ( NEW )
-	glBegin(GL_QUADS);									// Draw A Quad
-	glColor3f(0.0f, 1.0f, 0.0f);						// Set The Color To Green
-	glVertex3f(1.0f, 1.0f, -1.0f);					// Top Right Of The Quad (Top)
-	glVertex3f(-1.0f, 1.0f, -1.0f);					// Top Left Of The Quad (Top)
-	glVertex3f(-1.0f, 1.0f, 1.0f);					// Bottom Left Of The Quad (Top)
-	glVertex3f(1.0f, 1.0f, 1.0f);					// Bottom Right Of The Quad (Top)
-	glColor3f(1.0f, 0.5f, 0.0f);						// Set The Color To Orange
-	glVertex3f(1.0f, -1.0f, 1.0f);					// Top Right Of The Quad (Bottom)
-	glVertex3f(-1.0f, -1.0f, 1.0f);					// Top Left Of The Quad (Bottom)
-	glVertex3f(-1.0f, -1.0f, -1.0f);					// Bottom Left Of The Quad (Bottom)
-	glVertex3f(1.0f, -1.0f, -1.0f);					// Bottom Right Of The Quad (Bottom)
-	glColor3f(1.0f, 0.0f, 0.0f);						// Set The Color To Red
-	glVertex3f(1.0f, 1.0f, 1.0f);					// Top Right Of The Quad (Front)
-	glVertex3f(-1.0f, 1.0f, 1.0f);					// Top Left Of The Quad (Front)
-	glVertex3f(-1.0f, -1.0f, 1.0f);					// Bottom Left Of The Quad (Front)
-	glVertex3f(1.0f, -1.0f, 1.0f);					// Bottom Right Of The Quad (Front)
-	glColor3f(1.0f, 1.0f, 0.0f);						// Set The Color To Yellow
-	glVertex3f(1.0f, -1.0f, -1.0f);					// Top Right Of The Quad (Back)
-	glVertex3f(-1.0f, -1.0f, -1.0f);					// Top Left Of The Quad (Back)
-	glVertex3f(-1.0f, 1.0f, -1.0f);					// Bottom Left Of The Quad (Back)
-	glVertex3f(1.0f, 1.0f, -1.0f);					// Bottom Right Of The Quad (Back)
-	glColor3f(0.0f, 0.0f, 1.0f);						// Set The Color To Blue
-	glVertex3f(-1.0f, 1.0f, 1.0f);					// Top Right Of The Quad (Left)
-	glVertex3f(-1.0f, 1.0f, -1.0f);					// Top Left Of The Quad (Left)
-	glVertex3f(-1.0f, -1.0f, -1.0f);					// Bottom Left Of The Quad (Left)
-	glVertex3f(-1.0f, -1.0f, 1.0f);					// Bottom Right Of The Quad (Left)
-	glColor3f(1.0f, 0.0f, 1.0f);						// Set The Color To Violet
-	glVertex3f(1.0f, 1.0f, -1.0f);					// Top Right Of The Quad (Right)
-	glVertex3f(1.0f, 1.0f, 1.0f);					// Top Left Of The Quad (Right)
-	glVertex3f(1.0f, -1.0f, 1.0f);					// Bottom Left Of The Quad (Right)
-	glVertex3f(1.0f, -1.0f, -1.0f);					// Bottom Right Of The Quad (Right)
-	glEnd();											// Done Drawing The Quad
+	/** 渲染地形 */
+	g_Terrain.render();
 
-	rtri += 0.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
-	rquad -= 0.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
+
+	/** 绘制天空 */
+	g_SkyBox.render();
+
+
+	/** 显示3DS模型 */
+	Show3DS(260, 583, 20);
+
+	/** 输出屏幕信息 */
+	PrintText();
+
+	glFlush();	                 /**< 强制执行所有的OpenGL命令 */
+
 	return TRUE;										// Keep Going
 }
 
 GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 {
+	//输入系统卸载
+	InputSystemUninit();
+
+
 	if (fullscreen)										// Are We In Fullscreen Mode?
 	{
 		ChangeDisplaySettings(NULL, 0);					// If So Switch Back To The Desktop
@@ -167,6 +159,9 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 
 BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscreenflag)
 {
+
+
+
 	GLuint		PixelFormat;			// Holds The Results After Searching For A Match
 	WNDCLASS	wc;						// Windows Class Structure
 	DWORD		dwExStyle;				// Window Extended Style
@@ -176,6 +171,11 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 	WindowRect.right = (long)width;		// Set Right Value To Requested Width
 	WindowRect.top = (long)0;				// Set Top Value To 0
 	WindowRect.bottom = (long)height;		// Set Bottom Value To Requested Height
+
+	//for window position 
+	int middleX = GetSystemMetrics(SM_CXSCREEN) >> 1; /**< 得到屏幕宽度的一半 */
+	int middleY = GetSystemMetrics(SM_CYSCREEN) >> 1; /**< 得到屏幕高度的一半 */
+
 
 	fullscreen = fullscreenflag;			// Set The Global Fullscreen Flag
 
@@ -211,14 +211,14 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 		if (ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
 		{
 			// If The Mode Fails, Offer Two Options.  Quit Or Use Windowed Mode.
-			if (MessageBox(NULL, "The Requested Fullscreen Mode Is Not Supported By\nYour Video Card. Use Windowed Mode Instead?", "NeHe GL", MB_YESNO | MB_ICONEXCLAMATION) == IDYES)
+			if (MessageBox(NULL, "所请求的全屏模式并不受您的显卡支持, 是否选择窗口模式?", "NeHe GL", MB_YESNO | MB_ICONEXCLAMATION) == IDYES)
 			{
 				fullscreen = FALSE;		// Windowed Mode Selected.  Fullscreen = FALSE
 			}
 			else
 			{
 				// Pop Up A Message Box Letting User Know The Program Is Closing.
-				MessageBox(NULL, "Program Will Now Close.", "ERROR", MB_OK | MB_ICONSTOP);
+				MessageBox(NULL, "程序现将关闭。", "错误", MB_OK | MB_ICONSTOP);
 				return FALSE;									// Return FALSE
 			}
 		}
@@ -245,7 +245,8 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 		dwStyle |							// Defined Window Style
 		WS_CLIPSIBLINGS |					// Required Window Style
 		WS_CLIPCHILDREN,					// Required Window Style
-		0, 0,								// Window Position
+		middleX - (WindowRect.right - WindowRect.left) / 2
+		, middleY - (WindowRect.bottom - WindowRect.top)/2,								// Window Position
 		WindowRect.right - WindowRect.left,	// Calculate Window Width
 		WindowRect.bottom - WindowRect.top,	// Calculate Window Height
 		NULL,								// No Parent Window
@@ -399,13 +400,13 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 	BOOL	done = FALSE;								// Bool Variable To Exit Loop
 
 	// Ask The User Which Screen Mode They Prefer
-	if (MessageBox(NULL, "Would You Like To Run In Fullscreen Mode?", "Start FullScreen?", MB_YESNO | MB_ICONQUESTION) == IDNO)
+	if (MessageBox(NULL, "是否开启全屏模式？", "开启全屏模式？", MB_YESNO | MB_ICONQUESTION) == IDNO)
 	{
 		fullscreen = FALSE;							// Windowed Mode
 	}
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("NeHe's Solid Object Tutorial", 640, 480, 16, fullscreen))
+	if (!CreateGLWindow("啧啧", 640, 480, 16, fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
@@ -442,11 +443,16 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				KillGLWindow();						// Kill Our Current Window
 				fullscreen = !fullscreen;				// Toggle Fullscreen / Windowed Mode
 				// Recreate Our OpenGL Window
-				if (!CreateGLWindow("NeHe's Solid Object Tutorial", 640, 480, 16, fullscreen))
+				if (!CreateGLWindow("啧啧", 640, 480, 16, fullscreen))
 				{
 					return 0;						// Quit If Window Was Not Created
 				}
 			}
+
+			//程序更新
+			Update();
+
+
 		}
 	}
 

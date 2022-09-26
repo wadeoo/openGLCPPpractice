@@ -1,13 +1,15 @@
-﻿生成启动时间为 2022/9/26 20:05:13。
+﻿生成启动时间为 2022/9/26 22:09:58。
      1>项目“D:\BASIC\Desktop\openglCpp\openGLCPPpractice\Lesson5_2022_9_26\Lesson5_2022_9_26\Lesson5_2022_9_26.vcxproj”在节点 2 上(Rebuild 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /D _CRT_SECURE_NO_WARNINGS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt 3DSLoader.cpp Camera.cpp CBMPLoader.cpp Font.cpp Lesson5_2022_9_26.cpp MD2Loader.cpp SkyBox.cpp stdafx.cpp Terrain.cpp Vector.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /D _CRT_SECURE_NO_WARNINGS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt 3DSLoader.cpp Camera.cpp CBMPLoader.cpp Font.cpp Input.cpp Keys.cpp Lesson5_2022_9_26.cpp MD2Loader.cpp SkyBox.cpp stdafx.cpp Terrain.cpp Vector.cpp
          Vector.cpp
          Terrain.cpp
          stdafx.cpp
          SkyBox.cpp
          MD2Loader.cpp
          Lesson5_2022_9_26.cpp
+         Keys.cpp
+         Input.cpp
          Font.cpp
          CBMPLoader.cpp
          Camera.cpp
@@ -18,6 +20,8 @@
          Debug\Camera.obj
          Debug\CBMPLoader.obj
          Debug\Font.obj
+         Debug\Input.obj
+         Debug\Keys.obj
          Debug\Lesson5_2022_9_26.obj
          Debug\MD2Loader.obj
          Debug\SkyBox.obj
@@ -29,4 +33,4 @@
 
 生成成功。
 
-已用时间 00:00:04.81
+已用时间 00:00:05.51

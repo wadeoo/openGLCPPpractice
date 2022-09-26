@@ -72,5 +72,19 @@ public:
 	float x,y;
 };
 
+/** 2D平面上的点 */
+struct Point2
+{
+	int x, y;
+
+	Point2() :x(0), y(0) {}
+	Point2(int _x, int _y) :x(_x), y(_y) {}
+	const Point2 &operator=(const Point2 &p)
+	{
+		x = p.x;
+		y = p.y;
+		return *this;
+	}
+};
 
 #endif //__VECTOR_H__
