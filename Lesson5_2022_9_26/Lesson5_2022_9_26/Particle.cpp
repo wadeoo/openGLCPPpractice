@@ -42,7 +42,7 @@ bool CParticle::Init(int _num)
 }
 
 /** Á£×ÓµÄäÖÈ¾ */
-void CParticle::Render()
+void CParticle::Render(Vector3)
 {
 }
 

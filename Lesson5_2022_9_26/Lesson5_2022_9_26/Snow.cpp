@@ -77,7 +77,7 @@ bool CSnow::Init(int num)
 }
 
 /** 雪花的渲染 */
-void CSnow::Render()
+void CSnow::Render(Vector3 viewVect)
 {
 
 
@@ -97,7 +97,10 @@ void CSnow::Render()
 			break;
 		
 		glColor3fv(m_pList[i].color);
-		glNormal3f(0.0f,0.0f,1.0f);     /**< 定义法线方向 */
+
+
+
+		glNormal3f(viewVect.x,viewVect.y,viewVect.z);     /**< 定义法线方向 */
 		
 		/** 画出粒子 */
 		glBegin(GL_QUADS);

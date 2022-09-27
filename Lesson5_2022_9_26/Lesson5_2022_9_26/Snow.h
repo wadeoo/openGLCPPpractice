@@ -31,7 +31,7 @@ public:
 	~CSnow() {};
 	
 	bool		Init(int num );  /** 初始化过程 */
-	void		Render();        /**< 渲染过程 */
+	void		Render(Vector3 viewVect);        /**< 渲染过程 */
 	void		Update();        /**< 更新过程 */
 
 private:

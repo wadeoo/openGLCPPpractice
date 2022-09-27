@@ -56,7 +56,7 @@ public:
 	virtual bool Init(int _num);
 
 	/** 粒子的渲染 */
-	virtual void Render() = 0;
+	virtual void Render(Vector3) = 0;
 
 	/** 粒子的更新 */
 	virtual void Update() = 0;

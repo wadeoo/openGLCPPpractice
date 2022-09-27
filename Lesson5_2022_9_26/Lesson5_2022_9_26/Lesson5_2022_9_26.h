@@ -104,10 +104,13 @@ void SnowDraw(){
 
 	glEnable(GL_TEXTURE_2D);
 
-	glTranslatef(cameraPos.x,cameraPos.y,cameraPos.z-3);
+	glTranslatef(381, 230, 674);
+
+	//计算方向向量
+	Vector3 viewVector = g_Camera.getView() - g_Camera.getPosition();
 
 	//渲染雪花
-	g_Snow.Render();
+	g_Snow.Render(viewVector);
 
 
 
@@ -292,11 +295,11 @@ void UpdateCamera()
 	/** 键盘按键响应 */
 	if (g_Keys.IsPressed(VK_SHIFT))                        /**< 按下SHIFT键时加速 */
 	{
-		g_Camera.setSpeed(10.f);
+		g_Camera.setSpeed(5.f);
 	}
 	if (!g_Keys.IsPressed(VK_SHIFT))
 	{
-		g_Camera.setSpeed(6.f);
+		g_Camera.setSpeed(1.f);
 	}
 	if (g_Keys.IsPressed(VK_UP) || g_Keys.IsPressed('W'))   /**< 向上方向键或'W'键按下 */
 		g_Camera.moveCamera(g_Camera.getSpeed());          /**< 移动摄像机 */
