@@ -64,6 +64,10 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	SnowInit();
 
 
+	//protechny 初始化
+	ProtechnyInit();
+
+
 	/** 设置摄像机 */
 	g_Camera.setCamera(381, 35, 674, 374.5, 35, 669, 0, 1, 0);
 
@@ -100,6 +104,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	//雪花绘制渲染函数调用
 	SnowDraw();
 
+
+	//protechny 绘制渲染函数调用
+	ProtechnyDraw();
 
 	/** 输出屏幕信息 */
 	PrintText();

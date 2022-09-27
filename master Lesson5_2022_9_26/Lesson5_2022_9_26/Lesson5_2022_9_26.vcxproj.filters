@@ -60,6 +60,9 @@
     <ClCompile Include="Particle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Protechny.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DSLoader.h">
@@ -105,6 +108,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Particle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Protechny.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

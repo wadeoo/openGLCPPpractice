@@ -31,6 +31,7 @@ public:
 #include "Input.h"
 #include "Sound.h"
 #include "Snow.h"
+#include "Protechny.h"
 
 
 HDC			hDC = NULL;		// Private GDI Device Context
@@ -55,6 +56,7 @@ CSoundManager* g_pSoundManager;                     /**< 音频系统管理类 */
 CSound*        g_pSound1;                           /**< 声音1 */
 CSound*        g_pSound2;                           /**< 声音2 */
 CSnow			g_Snow; //雪花实例
+CProtechny g_Protechny;
 
 float g_Fps;
 bool  g_RenderMode;//绘制模式
@@ -67,10 +69,41 @@ float lift; //摄像机升降
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
 
+
+
+//protechny 初始化函数
+void ProtechnyInit(){
+
+
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+
+	glEnable(GL_TEXTURE_2D);             /**< 开启纹理映射 */
+
+	/** 设置混合因子获得半透明效果 */
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glEnable(GL_BLEND);				     /**< 启用混和 */
+
+	
+	if (!g_Protechny.Init(5000))
+	{
+		MessageBox(NULL, "protechny系统初始化失败!", "错误", MB_OK);
+		exit(-1);
+	}
+
+
+	glPopAttrib();
+}
+
+
+
+
+
 //snow初始化函数
 void  SnowInit(){
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
+
 
 	glEnable(GL_TEXTURE_2D);             /**< 开启纹理映射 */
 
@@ -104,6 +137,8 @@ void SnowDraw(){
 
 	glEnable(GL_TEXTURE_2D);
 
+	glDisable(GL_CULL_FACE);
+
 	glTranslatef(260, 220, 583);
 
 	//渲染雪花
@@ -114,6 +149,29 @@ void SnowDraw(){
 	glPopMatrix();
 	glPopAttrib();
 
+}
+
+
+
+//protechny draw 函数
+void ProtechnyDraw(){
+
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glPushMatrix();
+
+	glEnable(GL_TEXTURE_2D);
+
+	glDisable(GL_CULL_FACE);
+
+	glTranslatef(260, 220, 583);
+
+	//渲染雪花
+	g_Protechny.Render();
+
+
+
+	glPopMatrix();
+	glPopAttrib();
 }
 
 
