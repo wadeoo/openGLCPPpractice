@@ -24,6 +24,7 @@
 /** 包含DirectInput头文件 */
 #define DIRECTINPUT_VERSION  0x0800
 #include <dinput.h>
+#include <dsound.h>
 
 /** 包含OpenGL链接库文件 */
 #pragma comment(lib, "opengl32.lib")		
@@ -33,6 +34,7 @@
 /** 包含DirectInput链接库文件 */
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dinput8.lib")
+#pragma comment(lib, "dsound.lib")
 
 /**< 禁止编译器出现类型转换的警告 */
 #pragma warning(disable: 4311)                                 

@@ -28,6 +28,9 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	//输入系统初始化
 	InputSystemInit();
 
+	//音频系统和音频对象初始化
+	SoundRelatedInit();
+
 
 	/** 初始化字体 */
 	if (!g_Font.InitFont())
@@ -93,8 +96,8 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 {
-	//输入系统卸载
-	InputSystemUninit();
+	//自定义卸载函数
+	Uninit();
 
 
 	if (fullscreen)										// Are We In Fullscreen Mode?

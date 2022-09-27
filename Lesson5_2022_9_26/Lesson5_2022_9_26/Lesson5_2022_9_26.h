@@ -29,6 +29,7 @@ public:
 #include "MD2Loader.h"
 #include "Keys.h"
 #include "Input.h"
+#include "Sound.h"
 
 
 HDC			hDC = NULL;		// Private GDI Device Context
@@ -49,6 +50,9 @@ Camera g_Camera;
 Keys   g_Keys;
 CInputSystem* g_pInputForKeyboard;
 CInputSystem* g_pInputForMouse;
+CSoundManager* g_pSoundManager;                     /**< 音频系统管理类 */
+CSound*        g_pSound1;                           /**< 声音1 */
+CSound*        g_pSound2;                           /**< 声音2 */
 
 float g_Fps;
 bool  g_RenderMode;//绘制模式
@@ -59,6 +63,47 @@ float lift; //摄像机升降
 
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
+
+//音频系统和声音对象初始化函数
+void SoundRelatedInit(){
+
+	g_pSoundManager = new CSoundManager();
+	g_pSound1 = new CSound();
+	g_pSound2 = new CSound();
+
+
+	/** 音频系统初始化 */
+	g_pSoundManager->Init(hWnd);
+
+	/** 设置主缓冲区格式 */
+	g_pSoundManager->SetPrimaryBuffer();
+
+	/** 载入声音并播放 */
+	g_pSound1->LoadWaveFile("airplane.wav");
+	g_pSound1->Play(true);
+
+	g_pSound2->LoadWaveFile("explosion.wav");
+	g_pSound2->Play(true);
+
+}
+
+
+//音频系统和声音对象卸载函数
+void SoundRelatedUninit(){
+
+	if (g_pSound1)
+		delete g_pSound1;
+	if (g_pSound2)
+		delete g_pSound2;
+
+	if (g_pSoundManager)
+		delete g_pSoundManager;
+
+}
+
+
+
+
 
 
 //输入系统初始化
@@ -117,6 +162,18 @@ void InputSystemDraw(){
 	if (g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_A) &&
 		g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_LCONTROL))
 		sprintf(string1, "您按下了 %s 键", "CTRL + A");
+
+	/** 按下‘P’键停止飞机声音播放 */
+	if (g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_P))
+	{
+		g_pSound1->Stop();
+	}
+
+	/** 按下‘X’键停止爆炸声音播放 */
+	if (g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_X))
+	{
+		g_pSound2->Stop();
+	}
 
 	/** 输出提示信息 */
 	glColor3f(1.0f, 0.0f, 1.0f);
@@ -270,6 +327,10 @@ void  PrintText()
 	sprintf(string, "当前动作:%s(按'M'键切换下一个动作)", g_MD2.GetModel().pAnimations[g_MD2.GetModel().currentAnim].strName);
 	g_Font.PrintText(string, -5.0f, 2.0f);
 
+	/** 输出声音控制提示信息 */
+	g_Font.PrintText("按下‘P’键关闭飞机声音", -5.f, 1.5);
+	g_Font.PrintText("按下‘X’键关闭爆炸声音", -5.f, 1.0);
+
 	glPopAttrib();
 
 }
@@ -346,7 +407,12 @@ void Update()
 
 
 
+//主卸载函数
+void Uninit(){
 
+	InputSystemUninit();
+	SoundRelatedUninit();
+}
 
 
 
