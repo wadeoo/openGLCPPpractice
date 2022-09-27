@@ -30,6 +30,7 @@ public:
 #include "Keys.h"
 #include "Input.h"
 #include "Sound.h"
+#include "Snow.h"
 
 
 HDC			hDC = NULL;		// Private GDI Device Context
@@ -53,6 +54,7 @@ CInputSystem* g_pInputForMouse;
 CSoundManager* g_pSoundManager;                     /**< 音频系统管理类 */
 CSound*        g_pSound1;                           /**< 声音1 */
 CSound*        g_pSound2;                           /**< 声音2 */
+CSnow			g_Snow; //雪花实例
 
 float g_Fps;
 bool  g_RenderMode;//绘制模式
@@ -63,6 +65,46 @@ float lift; //摄像机升降
 
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
+
+
+//snow初始化函数
+void  SnowInit(){
+
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+	glEnable(GL_TEXTURE_2D);             /**< 开启纹理映射 */
+
+	/** 设置混合因子获得半透明效果 */
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glEnable(GL_BLEND);				     /**< 启用混和 */
+
+	if (!g_Snow.Init(500))
+	{
+		MessageBox(NULL, "雪花系统初始化失败!", "错误", MB_OK);
+		exit(-1);
+	}
+
+	glPopAttrib();
+
+}
+
+
+
+//snow draw 函数
+void SnowDraw(){
+
+	glPushMatrix();
+
+	glTranslatef(0.0f, 0.0f, -6.0f);
+
+	//渲染雪花
+	g_Snow.Render();
+
+	glPopMatrix();
+
+}
+
+
 
 //音频系统和声音对象初始化函数
 void SoundRelatedInit(){

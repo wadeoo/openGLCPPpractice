@@ -31,6 +31,9 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	//音频系统和音频对象初始化
 	SoundRelatedInit();
 
+	//雪花初始化
+	SnowInit();
+
 
 	/** 初始化字体 */
 	if (!g_Font.InitFont())
@@ -55,6 +58,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	/** 初始化3DS文件 */
 	g_3DS.Init("model.3ds");
 
+	//初始化md2文件
 	g_MD2.Init("hobgoblin.md2", "hobgoblin.bmp");
 
 	/** 设置摄像机 */
@@ -69,6 +73,11 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();									// Reset The Current Modelview Matrix
 	
+
+	//雪花绘制渲染函数调用
+	SnowDraw();
+
+
 	/** 放置摄像机 */
 	g_Camera.setLook();
 
