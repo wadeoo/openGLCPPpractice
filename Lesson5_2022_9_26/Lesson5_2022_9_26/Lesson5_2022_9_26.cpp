@@ -31,8 +31,6 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	//音频系统和音频对象初始化
 	SoundRelatedInit();
 
-	//雪花初始化
-	SnowInit();
 
 
 	/** 初始化字体 */
@@ -61,6 +59,11 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	//初始化md2文件
 	g_MD2.Init("hobgoblin.md2", "hobgoblin.bmp");
 
+
+	//雪花初始化
+	SnowInit();
+
+
 	/** 设置摄像机 */
 	g_Camera.setCamera(381, 35, 674, 374.5, 35, 669, 0, 1, 0);
 
@@ -74,12 +77,10 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glLoadIdentity();									// Reset The Current Modelview Matrix
 	
 
-	//雪花绘制渲染函数调用
-	SnowDraw();
-
-
 	/** 放置摄像机 */
 	g_Camera.setLook();
+
+
 
 	/** 渲染地形 */
 	g_Terrain.render();
@@ -94,6 +95,11 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 	//显示md2模型
 	Md2Animate(300, 600, 18, 0.50);
+
+
+	//雪花绘制渲染函数调用
+	SnowDraw();
+
 
 	/** 输出屏幕信息 */
 	PrintText();
@@ -161,7 +167,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 	glLoadIdentity();									// Reset The Projection Matrix
 
 	// Calculate The Aspect Ratio Of The Window
-	gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 10000.0f);
+	gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100000.0f);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix

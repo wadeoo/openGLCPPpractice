@@ -79,6 +79,8 @@ bool CSnow::Init(int num)
 /** 雪花的渲染 */
 void CSnow::Render()
 {
+
+
 	/** 绑定纹理 */
 	glBindTexture(GL_TEXTURE_2D,m_texture.ID);
 	

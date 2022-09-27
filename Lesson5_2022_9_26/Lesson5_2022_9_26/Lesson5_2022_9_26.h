@@ -84,6 +84,7 @@ void  SnowInit(){
 		exit(-1);
 	}
 
+
 	glPopAttrib();
 
 }
@@ -93,14 +94,25 @@ void  SnowInit(){
 //snow draw 函数
 void SnowDraw(){
 
+
+
+	Vector3 cameraPos = g_Camera.getPosition();
+
+
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glPushMatrix();
 
-	glTranslatef(0.0f, 0.0f, -6.0f);
+	glEnable(GL_TEXTURE_2D);
+
+	glTranslatef(cameraPos.x,cameraPos.y,cameraPos.z-3);
 
 	//渲染雪花
 	g_Snow.Render();
 
+
+
 	glPopMatrix();
+	glPopAttrib();
 
 }
 
@@ -353,8 +365,8 @@ void  PrintText()
 	char string[128];                               /**< 用于保存输出字符串 */
 	glPushAttrib(GL_CURRENT_BIT);                   /**< 保存现有颜色属性信息 */
 	glColor3f(0.0f, 1.0f, 1.0f);                      /**< 设置文字颜色 */
-	sprintf(string, "当前位置:X=%3.1f  Y=%3.1f Speed =%3.1f ",
-		g_Camera.getPosition().x, g_Camera.getPosition().z, g_Camera.getSpeed()); /**< 字符串赋值 */
+	sprintf(string, "当前位置:X=%3.1f Y=%3.1f Z=%3.1f Speed =%3.1f ",
+		g_Camera.getPosition().x,g_Camera.getPosition().y, g_Camera.getPosition().z, g_Camera.getSpeed()); /**< 字符串赋值 */
 	g_Font.PrintText(string, -5.0f, 3.5f);
 
 	/** 输出帧速 */
@@ -372,6 +384,13 @@ void  PrintText()
 	/** 输出声音控制提示信息 */
 	g_Font.PrintText("按下‘P’键关闭飞机声音", -5.f, 1.5);
 	g_Font.PrintText("按下‘X’键关闭爆炸声音", -5.f, 1.0);
+
+
+
+	sprintf(string, "当前观察点:X=%3.1f Y=%3.1f Z=%3.1f  ",
+		g_Camera.getView().x, g_Camera.getView().y, g_Camera.getView().z); /**< 字符串赋值 */
+	g_Font.PrintText(string, -5.0f, 0.5f);
+
 
 	glPopAttrib();
 
