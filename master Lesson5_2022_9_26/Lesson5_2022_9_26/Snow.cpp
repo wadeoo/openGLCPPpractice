@@ -51,7 +51,7 @@ bool CSnow::Init(int num)
 			m_pList[i].lifetime = 100;
 			
 			/** 初始化粒子的尺寸 */
-			m_pList[i].size = 0.07f;
+			m_pList[i].size = 0.001f;
 
 			/** 初始化粒子的消失速度 */
 			m_pList[i].dec = 0.005 * (rand()%50);

@@ -98,7 +98,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	Show3DS(260, 583, 20);
 
 	//显示md2模型
-	Md2Animate(300, 600, 18, 0.50);
+	Md2Animate(300, 600, 18, 0.6);
 
 
 	//雪花绘制渲染函数调用

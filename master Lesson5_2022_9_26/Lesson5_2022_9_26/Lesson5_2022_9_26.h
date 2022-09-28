@@ -111,7 +111,7 @@ void  SnowInit(){
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glEnable(GL_BLEND);				     /**< ÆôÓÃ»ìºÍ */
 
-	if (!g_Snow.Init(500))
+	if (!g_Snow.Init(50000))
 	{
 		MessageBox(NULL, "Ñ©»¨ÏµÍ³³õÊ¼»¯Ê§°Ü!", "´íÎó", MB_OK);
 		exit(-1);
@@ -131,6 +131,8 @@ void SnowDraw(){
 
 	Vector3 cameraPos = g_Camera.getPosition();
 
+	
+
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glPushMatrix();
@@ -140,6 +142,7 @@ void SnowDraw(){
 	glDisable(GL_CULL_FACE);
 
 	glTranslatef(260, 220, 583);
+	glScalef(200, 200, 200);
 
 	//äÖÈ¾Ñ©»¨
 	g_Snow.Render();
@@ -163,7 +166,7 @@ void ProtechnyDraw(){
 
 	glDisable(GL_CULL_FACE);
 
-	glTranslatef(260, 220, 583);
+	glTranslatef(300, 220, 600);
 
 	//äÖÈ¾Ñ©»¨
 	g_Protechny.Render();
