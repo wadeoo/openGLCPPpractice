@@ -29,7 +29,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	InputSystemInit();
 
 	//音频系统和音频对象初始化
-	SoundRelatedInit();
+	//SoundRelatedInit();
 
 
 

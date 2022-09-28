@@ -118,6 +118,7 @@ void  SnowInit(){
 	}
 
 
+
 	glPopAttrib();
 
 }
@@ -141,13 +142,21 @@ void SnowDraw(){
 
 	glDisable(GL_CULL_FACE);
 
-	glTranslatef(260, 220, 400);
+	glTranslatef(400, 220, 400);
 	glScalef(200, 200, 200);
+
+
 
 	//渲染雪花
 	g_Snow.Render();
 
 
+	glTranslated(0, 0, 1);
+	glRotatef(90, 0, 1, 0);
+
+
+	//旋转后二次渲染雪花
+	g_Snow.Render();
 
 	glPopMatrix();
 	glPopAttrib();
@@ -166,11 +175,18 @@ void ProtechnyDraw(){
 
 	glDisable(GL_CULL_FACE);
 
+
 	glTranslatef(300, 220, 600);
 
-	//渲染雪花
+	glScalef(50,50,50);
+
+	//渲染喷泉
 	g_Protechny.Render();
 
+	glRotatef(90, 0, 1, 0);
+
+	//旋转后二次渲染喷泉
+	g_Protechny.Render();
 
 
 	glPopMatrix();
