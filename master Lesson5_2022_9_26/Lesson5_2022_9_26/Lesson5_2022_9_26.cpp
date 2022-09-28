@@ -10,6 +10,8 @@ Lesson5_2022_9_26::Lesson5_2022_9_26()
 	g_Mp = false;
 	lift = 0;
 	fog_switch = false;
+	sound_switch = false;
+	isSoundPlaying = false;
 }
 
 
@@ -30,7 +32,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	InputSystemInit();
 
 	//音频系统和音频对象初始化
-	//SoundRelatedInit();
+	SoundRelatedInit();
 
 
 

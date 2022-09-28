@@ -63,9 +63,9 @@ bool  g_RenderMode;//绘制模式
 bool g_Sp;//空格键是否释放
 bool g_Mp;//'M'键是否释放
 float lift; //摄像机升降
-bool fog_switch;//雾效开关
-
-
+bool fog_switch;//控制雾效的开关
+bool sound_switch;//
+bool isSoundPlaying;//
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
@@ -210,12 +210,18 @@ void SoundRelatedInit(){
 	/** 设置主缓冲区格式 */
 	g_pSoundManager->SetPrimaryBuffer();
 
+}
+
+
+//控制声音播放
+void  soundPlay(){
 	/** 载入声音并播放 */
-	g_pSound1->LoadWaveFile("airplane.wav");
-	g_pSound1->Play(true);
 
 	g_pSound2->LoadWaveFile("explosion.wav");
 	g_pSound2->Play(true);
+
+	g_pSound1->LoadWaveFile("airplane.wav");
+	g_pSound1->Play(true);
 
 }
 
@@ -298,14 +304,18 @@ void InputSystemDraw(){
 	/** 按下‘P’键停止飞机声音播放 */
 	if (g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_P))
 	{
-		g_pSound1->Stop();
+		//g_pSound1->Stop();
+		
 	}
 
 	/** 按下‘X’键停止爆炸声音播放 */
 	if (g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_X))
 	{
-		g_pSound2->Stop();
+		//g_pSound2->Stop();
 	}
+
+
+
 
 	/** 输出提示信息 */
 	glColor3f(1.0f, 0.0f, 1.0f);
@@ -393,6 +403,11 @@ void UpdateCamera()
 		lift++;
 	if (g_Keys.IsPressed('E'))
 		lift--;
+
+	//控制sound_switch
+	if (g_Keys.IsPressed('P'))
+		sound_switch = !sound_switch;
+
 
 	/** 根据地形高度更新摄像机 */
 	Vector3 vPos = g_Camera.getPosition();                  /**< 得到当前摄像机位置 */
@@ -527,6 +542,18 @@ void Update()
 	else
 	{
 		CTerrain::uninitFog();
+	}
+
+	if (sound_switch && !isSoundPlaying)
+	{
+		soundPlay();
+		isSoundPlaying = true;
+	}
+	else if (!sound_switch && isSoundPlaying)
+	{
+		g_pSound1->Stop();
+		g_pSound2->Stop();
+		isSoundPlaying = false;
 	}
 
 
