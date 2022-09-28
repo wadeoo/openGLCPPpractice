@@ -141,7 +141,7 @@ void SnowDraw(){
 
 	glDisable(GL_CULL_FACE);
 
-	glTranslatef(260, 220, 583);
+	glTranslatef(260, 220, 400);
 	glScalef(200, 200, 200);
 
 	//‰÷»æ—©ª®
