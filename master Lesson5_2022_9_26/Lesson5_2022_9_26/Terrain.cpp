@@ -17,6 +17,8 @@
 #include "Terrain.h"
 #include "CBMPLoader.h"
 
+extern bool fog_switch;
+
 /** 当前CTerrain指针 */
 CTerrain* CTerrain::m_pTerrain = NULL;
 
@@ -76,6 +78,10 @@ void CTerrain::initFog()
 
 }
 
+void CTerrain::uninitFog(){
+	glDisable(GL_FOG);
+}
+
 
 /** 初始化地形 */
 bool CTerrain::init()
@@ -97,9 +103,7 @@ bool CTerrain::init()
 	/** 载入纹理 */
 	loadTexture();
 
-	/** 初始化雾效 */
-    initFog();
-	
+
 	return true;
 }
 

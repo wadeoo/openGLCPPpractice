@@ -50,6 +50,12 @@ public:
 	
 	/** 得到当前Terrain指针 */
 	static CTerrain* GetTerrainPointer() { return m_pTerrain;}
+
+	/** 设置雾效 */
+	static void initFog();
+
+	/*卸载雾效*/
+	static void uninitFog();
 	
 
 private:
@@ -69,8 +75,7 @@ private:
 	/** 设置纹理坐标 */
 	void setTexCoord(float x, float z);
 
-	/** 设置雾效 */
-	void initFog();
+
 
                       
 	

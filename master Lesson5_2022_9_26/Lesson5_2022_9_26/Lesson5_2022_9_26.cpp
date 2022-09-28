@@ -9,6 +9,7 @@ Lesson5_2022_9_26::Lesson5_2022_9_26()
 	g_Sp = false;
 	g_Mp = false;
 	lift = 0;
+	fog_switch = false;
 }
 
 

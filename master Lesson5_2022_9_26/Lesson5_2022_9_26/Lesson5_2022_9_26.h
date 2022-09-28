@@ -63,6 +63,7 @@ bool  g_RenderMode;//绘制模式
 bool g_Sp;//空格键是否释放
 bool g_Mp;//'M'键是否释放
 float lift; //摄像机升降
+bool fog_switch;//雾效开关
 
 
 
@@ -308,7 +309,7 @@ void InputSystemDraw(){
 
 	/** 输出提示信息 */
 	glColor3f(1.0f, 0.0f, 1.0f);
-	g_Font.PrintText(string1, -5.0, 2.5);
+	g_Font.PrintText(string1, -5.0, 2.f);
 
 
 	//fot mouse
@@ -446,27 +447,33 @@ void  PrintText()
 		g_Camera.getPosition().x,g_Camera.getPosition().y, g_Camera.getPosition().z, g_Camera.getSpeed()); /**< 字符串赋值 */
 	g_Font.PrintText(string, -5.0f, 3.5f);
 
+	sprintf(string, "当前观察点:X=%3.1f Y=%3.1f Z=%3.1f  ",
+		g_Camera.getView().x, g_Camera.getView().y, g_Camera.getView().z); /**< 字符串赋值 */
+	g_Font.PrintText(string, -5.0f, 3.f);
+
+
 	/** 输出帧速 */
 	CaculateFrameRate();                               /**< 计算帧速 */
 	sprintf(string, "FPS:%d", (int)g_Fps);               /**< 字符串赋值 */
-	g_Font.PrintText(string, -5.0f, 3.0f);              /**< 输出字符串 */
+	g_Font.PrintText(string, -5.0f, 2.5f);              /**< 输出字符串 */
 
 	//输入系统有关字体显示
 	InputSystemDraw();
 
 	/** 输出帧名称 */
 	sprintf(string, "当前动作:%s(按'M'键切换下一个动作)", g_MD2.GetModel().pAnimations[g_MD2.GetModel().currentAnim].strName);
-	g_Font.PrintText(string, -5.0f, 2.0f);
+	g_Font.PrintText(string, -5.0f, 1.5f);
 
 	/** 输出声音控制提示信息 */
-	g_Font.PrintText("按下‘P’键关闭飞机声音", -5.f, 1.5);
-	g_Font.PrintText("按下‘X’键关闭爆炸声音", -5.f, 1.0);
+	g_Font.PrintText("按下‘P’键关闭飞机声音", -5.f, 1.f);
+	g_Font.PrintText("按下‘X’键关闭爆炸声音", -5.f, .5f);
+
+	//网格模式开关提示
+	g_Font.PrintText("按下空格键开关网格绘制模式", -5.f, 0.f);
 
 
-
-	sprintf(string, "当前观察点:X=%3.1f Y=%3.1f Z=%3.1f  ",
-		g_Camera.getView().x, g_Camera.getView().y, g_Camera.getView().z); /**< 字符串赋值 */
-	g_Font.PrintText(string, -5.0f, 0.5f);
+	//雾效开关提示
+	g_Font.PrintText("按下'F'键开关雾效", -5.f, -.5f);
 
 
 	glPopAttrib();
@@ -512,6 +519,17 @@ void Update()
 	/** 更新摄像机 */
 	UpdateCamera();
 
+	/** 根据开关决定是否初始化雾效 */
+	if (fog_switch)
+	{
+		CTerrain::initFog();
+	}
+	else
+	{
+		CTerrain::uninitFog();
+	}
+
+
 	/** 空格键切换绘制模式 */
 	if (g_Keys.IsPressed(VK_SPACE) && !g_Sp)
 	{
@@ -540,6 +558,13 @@ void Update()
 	if (!g_Keys.IsPressed('M'))
 	{
 		g_Mp= false;
+	}
+
+
+	//按f开关雾效
+	if (g_Keys.IsPressed('F'))
+	{
+		fog_switch = !fog_switch;
 	}
 }
 
