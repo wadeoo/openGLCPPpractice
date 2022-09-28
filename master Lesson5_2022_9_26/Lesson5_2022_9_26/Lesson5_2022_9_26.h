@@ -301,18 +301,19 @@ void InputSystemDraw(){
 		g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_LCONTROL))
 		sprintf(string1, "您按下了 %s 键", "CTRL + A");
 
-	/** 按下‘P’键停止飞机声音播放 */
-	if (g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_P))
-	{
-		//g_pSound1->Stop();
-		
-	}
 
-	/** 按下‘X’键停止爆炸声音播放 */
-	if (g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_X))
-	{
-		//g_pSound2->Stop();
-	}
+	///** 按下‘P’键停止飞机声音播放 */
+	//if (g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_P))
+	//{
+	//	g_pSound1->Stop();
+	//	
+	//}
+
+	///** 按下‘X’键停止爆炸声音播放 */
+	//if (g_pInputForKeyboard->GetKeyboard()->KeyDown(DIK_X))
+	//{
+	//	g_pSound2->Stop();
+	//}
 
 
 
@@ -480,8 +481,8 @@ void  PrintText()
 	g_Font.PrintText(string, -5.0f, 1.5f);
 
 	/** 输出声音控制提示信息 */
-	g_Font.PrintText("按下‘P’键关闭飞机声音", -5.f, 1.f);
-	g_Font.PrintText("按下‘X’键关闭爆炸声音", -5.f, .5f);
+	g_Font.PrintText("按下‘P’键开关声音", -5.f, 1.f);
+//	g_Font.PrintText("按下‘X’键关闭爆炸声音", -5.f, .5f);
 
 	//网格模式开关提示
 	g_Font.PrintText("按下空格键开关网格绘制模式", -5.f, 0.f);
@@ -544,6 +545,7 @@ void Update()
 		CTerrain::uninitFog();
 	}
 
+	//根据开关状态和声音播放状态决定行为
 	if (sound_switch && !isSoundPlaying)
 	{
 		soundPlay();

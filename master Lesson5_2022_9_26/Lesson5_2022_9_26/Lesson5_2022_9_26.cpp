@@ -12,6 +12,7 @@ Lesson5_2022_9_26::Lesson5_2022_9_26()
 	fog_switch = false;
 	sound_switch = false;
 	isSoundPlaying = false;
+
 }
 
 
