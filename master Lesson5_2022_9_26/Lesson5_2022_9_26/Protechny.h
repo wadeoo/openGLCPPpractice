@@ -20,6 +20,7 @@
 
 #include "CBMPLoader.h"
 #include "Particle.h"
+#include <random>
 
 
 /** ÅçÈªÀà */

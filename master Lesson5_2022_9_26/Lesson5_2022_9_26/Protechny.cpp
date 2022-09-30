@@ -52,9 +52,9 @@ bool CProtechny::Init(int num)
 			m_pList[i].dec = 0.05 * (rand() % 50);
 
 			/** 初始化粒子的颜色 */
-			m_pList[i].color[0] = 255.0f;
-			m_pList[i].color[1] = 255.0f;
-			m_pList[i].color[2] = 255.0f;
+			m_pList[i].color[0] =0.8;
+			m_pList[i].color[1] =0.8;
+			m_pList[i].color[2] =0.8;
 
 		}
 
@@ -143,6 +143,20 @@ void CProtechny::Update()
 			/** 初始化消失速度 */
 			m_pList[i].dec = 0.05*(rand() % 50);
 		}
+
+
+
+		if (m_pList[i].color[0] > 1 || m_pList[i].color[1] > 1 || m_pList[3].color[2] > 1)
+		{
+			m_pList[i].color[0] = 0.65;
+			m_pList[i].color[1] = 0.65;
+			m_pList[i].color[2] = 0.65;
+		}
+		
+		m_pList[i].color[0] += 0.00001*(std::rand());
+		m_pList[i].color[1] += 0.00001*(std::rand());
+		m_pList[i].color[2] += 0.00001*(std::rand());
+
 
 	}
 
