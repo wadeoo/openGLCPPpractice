@@ -58,7 +58,7 @@ CSound*        g_pSound1;                           /**< 声音1 */
 CSound*        g_pSound2;                           /**< 声音2 */
 CSnow			g_Snow; //雪花实例
 CProtechny g_Protechny;
-Light g_light1;
+Light g_light;
 
 float g_Fps;
 bool  g_RenderMode;//绘制模式
@@ -533,6 +533,9 @@ void Update()
 
 	/** 用户自定义的更新过程 */
 
+	//灯光更新
+	g_light.Update();
+
 	/** 输入系统更新 */
 	g_pInputForKeyboard->Update();
 	g_pInputForMouse->Update();
@@ -607,7 +610,6 @@ void Update()
 		snow_switch = !snow_switch;
 	}
 
-	g_light1.setLight();
 	
 }
 

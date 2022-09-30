@@ -31,6 +31,9 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 
+	//灯光初始化
+	g_light.Init();
+
 	//输入系统初始化
 	InputSystemInit();
 
@@ -86,6 +89,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();									// Reset The Current Modelview Matrix
 
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	g_light.Draw();
+	glPopAttrib();
 	
 
 	/** 放置摄像机 */
