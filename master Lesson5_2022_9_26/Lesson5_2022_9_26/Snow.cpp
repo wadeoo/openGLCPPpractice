@@ -33,9 +33,9 @@ bool CSnow::Init(int num)
 			y = 2 + 0.1f * (rand() % 2);
 		
 			if((int)x % 2 == 0)
-				z = rand()%6;
+				z = rand()%30*0.1f;
 		    else 
-				z = -rand()%3;
+				z = -rand()%15*0.1f;
 			m_pList[i].position = Vector3(x,y,z);
 
 			/** 初始化速度 */
@@ -139,9 +139,9 @@ void CSnow::Update()
 			y = 2 + 0.1f * (rand()%2);
 			
 			if((int)x%2 == 0)
-				z = rand()%6;
+				z = rand()%60*0.1f;
 		    else 
-				z = -rand()%3;
+				z = -rand()%30*0.1f;
 			m_pList[i].position = Vector3(x,y,z);
 
 			/** 初始化速度 */
