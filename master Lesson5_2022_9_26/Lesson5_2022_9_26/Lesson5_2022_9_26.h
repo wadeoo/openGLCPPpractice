@@ -1,5 +1,6 @@
 #pragma once
 
+
 class Lesson5_2022_9_26
 {
 public:

@@ -73,6 +73,12 @@ public:
 	CMouse(LPDIRECTINPUT8 pDI,HWND hwnd,bool isExclusive);
 	~CMouse();
 
+
+	/**\brief
+	* 获得鼠标滚轮状态,(<0,0,>0)
+	*/
+	int		GetWheelState();
+
 	/** 鼠标左键是否按下 */
 	bool	IsLButtonPressed();
 
@@ -108,6 +114,9 @@ private:
 
 	/** 缓冲区数据数组 */
 	DIDEVICEOBJECTDATA      m_diData[DINPUT_BUFFERSIZE];
+
+	//! 鼠标状态
+	DIMOUSESTATE			m_state;
 	
 	/** 光标位置 */
 	Point2					m_iMousePos;
@@ -266,6 +275,17 @@ inline bool CKeyboard::Unacquire()
 //////////////////////////////////////////////////////////////////
 /**  CMoust类inline操作和实现 */ 
 
+
+
+
+/**\brief
+* 获得鼠标滚轮状态 (<0,0,>0)
+*/
+inline int	CMouse::GetWheelState()
+{
+	return m_state.lZ;
+}
+
 /** 获得光标位置 */
 inline Point2 CMouse::GetMousePos()
 {
@@ -344,6 +364,9 @@ inline void CInputSystem::UnacquireAll()
 	if(m_pJoystick)     m_pJoystick->Unacquire();
 	
 }
+
+
+
 
 
 #endif //__INPUT_H__

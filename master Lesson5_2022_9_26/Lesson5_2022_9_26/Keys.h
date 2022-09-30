@@ -1,4 +1,6 @@
 #pragma once
+#ifndef _KEYS_H_
+#define _KEYS_H_
 //定义键盘类
 #include "stdafx.h"
 class Keys
@@ -24,3 +26,5 @@ private:
 	static const unsigned int MAX_KEYS = 256;
 	bool m_KeyDown[MAX_KEYS];									/**< 保存256个按键的状态 */
 };
+
+#endif
