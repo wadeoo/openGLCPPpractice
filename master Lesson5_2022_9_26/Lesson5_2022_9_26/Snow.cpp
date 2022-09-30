@@ -41,7 +41,7 @@ bool CSnow::Init(int num)
 			/** 初始化速度 */
 			vx = 0.00001 * (rand()%100);
 			vy = 0.0000002 * (rand()%28000);
-			vz = 0.0;
+			vz = 0.00001 * (rand() % 100);
 			m_pList[i].velocity = Vector3(vx,vy,vz);
 
 			/** 初始化加速度 */
@@ -147,7 +147,7 @@ void CSnow::Update()
 			/** 初始化速度 */
 			vx = (float)(0.00001 * (rand()%100));
 			vy = (float)(0.0000002 * (rand()%28000));
-			vz = 0.0;
+			vz = 0.00001 * (rand() % 100);
 			m_pList[i].velocity = Vector3(vx,vy,vz);
 
 			/** 初始化加速度 */

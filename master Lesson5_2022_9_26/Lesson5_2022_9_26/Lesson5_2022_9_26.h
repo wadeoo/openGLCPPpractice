@@ -181,9 +181,9 @@ void ProtechnyDraw(){
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_LIGHTING);
 
-	glTranslatef(200, 220, 600);
+	glTranslatef(200, 240, 600);
 
-	glScalef(50,50,50);
+	glScalef(30,30,30);
 
 	//‰÷»æ≈Á»™
 	g_Protechny.Render();

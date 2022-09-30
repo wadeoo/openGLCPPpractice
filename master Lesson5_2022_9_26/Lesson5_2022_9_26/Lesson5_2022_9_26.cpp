@@ -31,8 +31,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 
-	//灯光初始化
-	g_light.Init();
+
 
 	//输入系统初始化
 	InputSystemInit();
@@ -80,6 +79,8 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	/** 设置摄像机 */
 	g_Camera.setCamera(381, 35, 674, 374.5, 35, 669, 0, 1, 0);
 
+	//灯光初始化
+	g_light.Init();
 
 	return TRUE;										// Initialization Went OK
 }

@@ -20,6 +20,7 @@
 /** 喷泉粒子的初始化 */
 bool CProtechny::Init(int num)
 {
+
 	/** 初始化粒子数目为num个 */
 	if(CParticle::Init(num))
 	{
@@ -40,7 +41,8 @@ bool CProtechny::Init(int num)
 			m_pList[i].velocity = Vector3(vx,vy,vz);
 
 			/** 初始化加速度 */
-			m_pList[i].acceleration = Vector3(0.0,-0.00025f,0.0);
+			//m_pList[i].acceleration = Vector3(0.0,-0.00025f,0.0);
+			m_pList[i].acceleration = Vector3(0,0,0);
 
 			/** 初始化粒子生命时间 */
 			m_pList[i].lifetime = 100;
@@ -74,6 +76,8 @@ bool CProtechny::Init(int num)
 /** 喷泉粒子的渲染 */
 void CProtechny::Render()
 {
+
+
 	/** 绑定纹理 */
 	glBindTexture(GL_TEXTURE_2D,m_texture.ID);
 	
@@ -119,7 +123,9 @@ void CProtechny::Update()
 		m_pList[i].lifetime -= m_pList[i].dec;
 
 		/** 如果粒子消失或生命结束 */
-		if (m_pList[i].position.y <= -1 || m_pList[i].lifetime <= 0)
+	if (m_pList[i].position.y <= -1 || m_pList[i].lifetime <= 0 || m_pList[i].position.y>=1
+			|| m_pList[i].position.x <= -0.2 || m_pList[i].position.x >= 0.2 || m_pList[i].position.z <= -0.2
+			|| m_pList[i].position.z >= 0.2)
 		{
 			/** 初始化位置 */
 			float x,y,z,vx,vy,vz;
@@ -135,7 +141,8 @@ void CProtechny::Update()
 			m_pList[i].velocity = Vector3(vx,vy,vz);
 
 			/** 初始化加速度 */
-			m_pList[i].acceleration = Vector3(0.0,-0.00025f,0.0);
+			//m_pList[i].acceleration = Vector3(0.0,-0.00025f,0.0);
+			m_pList[i].acceleration = Vector3(0.0,0.0,0.0);
 
 			/** 初始化生命时间 */
 			m_pList[i].lifetime = 100;
