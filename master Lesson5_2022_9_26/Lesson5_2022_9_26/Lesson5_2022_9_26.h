@@ -32,6 +32,7 @@ public:
 #include "Sound.h"
 #include "Snow.h"
 #include "Protechny.h"
+#include "Light.h"
 
 
 HDC			hDC = NULL;		// Private GDI Device Context
@@ -57,6 +58,7 @@ CSound*        g_pSound1;                           /**< 声音1 */
 CSound*        g_pSound2;                           /**< 声音2 */
 CSnow			g_Snow; //雪花实例
 CProtechny g_Protechny;
+Light g_light1;
 
 float g_Fps;
 bool  g_RenderMode;//绘制模式
@@ -66,6 +68,7 @@ float lift; //摄像机升降
 bool fog_switch;//控制雾效的开关
 bool sound_switch;//
 bool isSoundPlaying;//
+bool snow_switch;//
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
@@ -142,6 +145,7 @@ void SnowDraw(){
 	glEnable(GL_TEXTURE_2D);
 
 	glDisable(GL_CULL_FACE);
+	glDisable(GL_LIGHTING);
 
 	glTranslatef(400, 220, 400);
 	glScalef(200, 200, 200);
@@ -175,9 +179,9 @@ void ProtechnyDraw(){
 	glEnable(GL_TEXTURE_2D);
 
 	glDisable(GL_CULL_FACE);
+	glDisable(GL_LIGHTING);
 
-
-	glTranslatef(300, 220, 600);
+	glTranslatef(200, 220, 600);
 
 	glScalef(50,50,50);
 
@@ -482,7 +486,7 @@ void  PrintText()
 
 	/** 输出声音控制提示信息 */
 	g_Font.PrintText("按下‘P’键开关声音", -5.f, 1.f);
-//	g_Font.PrintText("按下‘X’键关闭爆炸声音", -5.f, .5f);
+	g_Font.PrintText("按下‘X’键开关雪", -5.f, .5f);
 
 	//网格模式开关提示
 	g_Font.PrintText("按下空格键开关网格绘制模式", -5.f, 0.f);
@@ -500,13 +504,14 @@ void  PrintText()
 /** 显示3DS模型 */
 void Show3DS(float x, float z, float scale)
 {
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glPushMatrix();
 	float y = g_Terrain.getAveHeight(x, z);  /**< 获得此处地形高度 */
 	glTranslatef(x, y, z);
 	glScalef(scale, scale, scale);
 	g_3DS.Draw();                            /**< 显示3DS模型 */
 	glPopMatrix();
-
+	glPopAttrib();
 }
 
 //MD2模型显示加动画
@@ -595,6 +600,15 @@ void Update()
 	{
 		fog_switch = !fog_switch;
 	}
+
+	//按x开关雪景
+	if (g_Keys.IsPressed('X'))
+	{
+		snow_switch = !snow_switch;
+	}
+
+	g_light1.setLight();
+	
 }
 
 

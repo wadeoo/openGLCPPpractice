@@ -12,6 +12,7 @@ Lesson5_2022_9_26::Lesson5_2022_9_26()
 	fog_switch = false;
 	sound_switch = false;
 	isSoundPlaying = false;
+	snow_switch = false;
 
 }
 
@@ -28,6 +29,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glEnable(GL_CULL_FACE);
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
 
 	//输入系统初始化
 	InputSystemInit();
@@ -83,6 +85,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();									// Reset The Current Modelview Matrix
+
 	
 
 	/** 放置摄像机 */
@@ -106,7 +109,10 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 
 	//雪花绘制渲染函数调用
-	SnowDraw();
+	if (snow_switch)
+	{
+		SnowDraw();
+	}
 
 
 	//protechny 绘制渲染函数调用
