@@ -1,7 +1,7 @@
 #pragma once
 #ifndef COMPUTER
 #include<iostream>
-#include<string.h>
+#include<string>
 #include"Cpu.h"
 #include"Ram.h"
 #include"MainBoard.h"

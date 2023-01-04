@@ -1,2 +1,2 @@
-PlatformToolSet=v143:VCToolArchitecture=Native64Bit:VCToolsVersion=14.33.31629:TargetPlatformVersion=10.0.19041.0:
-Debug|x64|D:\BASIC\Desktop\3d 程序设计基础\practice\Computer\|
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v120_xp:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit
+Debug|x64|D:\BASIC\Desktop\openglCpp\openGLCPPpractice\Computer\|
